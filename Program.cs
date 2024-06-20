@@ -1,10 +1,7 @@
-﻿char[,] viewportArray = new char[15, 108];
+﻿using GameOfLife;
 
-for (int x = 0; x < 15; x++)
-{
-    for (int y = 0; y < 108; y++)
-    {
-        Console.Write("a");
-    }
-    Console.WriteLine("\n");
-}
+short[] coord = UserInterface.requestCoord("Insert your starting coordinates (x,y)");
+Viewport.initialize(' ');
+Console.ReadLine();
+Viewport.createLife(coord[0], coord[1]);
+Console.ReadLine();
