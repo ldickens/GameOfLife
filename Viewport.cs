@@ -4,7 +4,7 @@
     {
         public static int curHeight = Console.WindowHeight;
         public static int curWidth = Console.WindowWidth;
-        private static char[,] buffer = new char[curHeight, curWidth]; 
+        public static char[,] buffer = new char[curHeight, curWidth]; 
 
         static Viewport()
         {
@@ -12,7 +12,7 @@
             Console.CursorVisible = false;
         }
 
-        public static void fillBuffer(char character)
+        private static void fillBuffer(char character)
         {
             for (int r = 0; r < curHeight; r++)
             {
@@ -25,7 +25,7 @@
             }
         }
 
-        public static void insertChar(char character, int x, int y)
+        private static void insertChar(char character, int x, int y)
         {
             if (x > curWidth || y > curHeight)
             {
@@ -52,14 +52,18 @@
             }
         }
 
-        public static void initialize(char character)
+        public static void initialize()
         {
-            fillBuffer(character);
+            fillBuffer(' ');
         }
 
-        public static void createLife(int x, int y)
+        public static void createLife(int x, int y, bool live)
         {
-            insertChar((char)127, x, y);
+            if (live)
+            {
+                insertChar((char)127, x, y);
+            }
+            insertChar(' ', x, y);
         }
     }
 }

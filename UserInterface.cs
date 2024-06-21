@@ -4,15 +4,15 @@ namespace GameOfLife
 {
     class UserInterface
     {
-        public static short[] requestCoord(string text)
+        public static int[] requestPositions()
         {
-            string coord = "";
+            string? coord = "";
 
             while (true)
             {
-                Console.WriteLine(text);
+                Console.WriteLine($"Insert your starting Positions (0 - {Viewport.curWidth * Viewport.curHeight})");
                 coord = Console.ReadLine();
-                string pattern = """^\d+,\d+$""";
+                string pattern = """^(\d+)+$""";
 
                 if (coord != null && regxCheck(pattern, coord))
                 {
@@ -21,7 +21,7 @@ namespace GameOfLife
 
                 Console.WriteLine($"Coordinate must be between [x] 0 - {Viewport.curWidth} and [y] 0 - {Viewport.curHeight}");
             }
-            return convertStringtoShortArray(coord, ',');
+            return convertStringtoIntArray(coord, ' ');
         }
 
         private static bool regxCheck(string pattern, string text)
@@ -37,9 +37,9 @@ namespace GameOfLife
             return false;
         }
 
-        private static short[] convertStringtoShortArray(string text, char seperator)
+        private static int[] convertStringtoIntArray(string text, char seperator)
         {
-            short[] ints = text.Split(seperator).Select(n => Convert.ToInt16(n)).ToArray();
+            int[] ints = text.Split(seperator).Select(n => Convert.ToInt32(n)).ToArray();
             return ints;
         }
     }
