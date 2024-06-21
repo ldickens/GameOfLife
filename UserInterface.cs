@@ -12,14 +12,13 @@ namespace GameOfLife
             {
                 Console.WriteLine($"Insert your starting Positions (0 - {Viewport.curWidth * Viewport.curHeight})");
                 coord = Console.ReadLine();
-                string pattern = """^(\d+)+$""";
+                string pattern = """(\d+ )\d+$""";
 
                 if (coord != null && regxCheck(pattern, coord))
                 {
                     break;
                 }
 
-                Console.WriteLine($"Coordinate must be between [x] 0 - {Viewport.curWidth} and [y] 0 - {Viewport.curHeight}");
             }
             return convertStringtoIntArray(coord, ' ');
         }

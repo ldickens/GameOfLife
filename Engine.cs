@@ -3,7 +3,7 @@
 
 namespace GameOfLife
 {
-    class Engine
+    static class Engine
     {
         /* Two Algos to complete this task:
          * 1st:
@@ -11,9 +11,19 @@ namespace GameOfLife
          * 
          * 2nd:
          * Check each live cell then add a count to each neighbour, finally iterate through whole buffer and update viewport.
-        */
-
+        */ 
         private static Cell[,] cells = new Cell[Viewport.curHeight, Viewport.curWidth];
+
+        static Engine()
+        {
+            for (int r = 0; r < Viewport.curHeight; r++)
+            {
+                for (int c = 0; c < Viewport.curWidth; c++)
+                {
+                    cells[r, c] = new Cell();
+                }
+            }
+        }
 
         public static void Run()
         {
@@ -96,6 +106,7 @@ namespace GameOfLife
                 int x = num % Viewport.curWidth;
                 int y = num / Viewport.curWidth;
 
+                cells[y, x].live = true;
                 Viewport.createLife(x, y, true);
             }
         }

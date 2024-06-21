@@ -12,7 +12,7 @@
             Console.CursorVisible = false;
         }
 
-        private static void fillBuffer(char character)
+        public static void fillBuffer(char character)
         {
             for (int r = 0; r < curHeight; r++)
             {
@@ -21,7 +21,6 @@
                     buffer[r, c] = character;
                     Console.Write(character);
                 }
-                Console.Write("\n");
             }
         }
 
@@ -54,6 +53,7 @@
 
         public static void initialize()
         {
+            Console.Clear();
             fillBuffer(' ');
         }
 
