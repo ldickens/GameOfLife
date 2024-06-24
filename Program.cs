@@ -1,3 +1,3 @@
 ﻿using GameOfLife;
 
-EventLoop.start();
+EventLoop.Start();

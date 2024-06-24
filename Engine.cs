@@ -11,103 +11,133 @@ namespace GameOfLife
          * 
          * 2nd:
          * Check each live cell then add a count to each neighbour, finally iterate through whole buffer and update viewport.
-        */ 
-        private static Cell[,] cells = new Cell[Viewport.curHeight, Viewport.curWidth];
+        */
+        public static int cellWidth = Viewport.buffWidth - 1;
+        public static int cellHeight = Viewport.buffHeight;
+        private static Cell[,] cells = new Cell[cellHeight, cellWidth];
 
         static Engine()
         {
-            for (int r = 0; r < Viewport.curHeight; r++)
+            for (int r = 0; r < cellHeight; r++)
             {
-                for (int c = 0; c < Viewport.curWidth; c++)
+                for (int c = 0; c < cellWidth; c++)
                 {
-                    cells[r, c] = new Cell();
+                    cells[r, c] = new Cell(r, c);
                 }
             }
         }
 
-        public static void Run()
+        public static void run()
         {
-            while (true)
+            bool surviving = true;
+
+            while (surviving == true)
             {
-                findLiveCells();
-                initNewGen();
-                Thread.Sleep(16);
+                FindLiveCells();
+                surviving = CalcNewGeneration();
+                RenderAll();
+                Thread.Sleep(1000);
+            }
+            Console.WriteLine("\nCivilisation Failed");
+            Reset();
+        }
+
+        private static void Reset()
+        {
+            foreach (Cell cell in cells)
+            {
+                cell.live = false;
+                cell.liveNeighbour = 0;
             }
         }
 
-        private static void initNewGen()
+        private static bool CalcNewGeneration()
         {
+            bool surviving = false;
+
             foreach (var cell in cells)
             {
-                if (cell.liveNeighbour < 2)
+                if (cell.live == false && cell.liveNeighbour != 3)
+                {
+                    cell.liveNeighbour = 0;
+                }
+                else if (cell.live && cell.liveNeighbour < 2)
                 {
                     cell.live = false;
                     cell.liveNeighbour = 0;
-                    continue;
                 }
-                else if (cell.live == false && cell.liveNeighbour == 3)
+                else if (cell.live == true && cell.liveNeighbour > 1 && cell.liveNeighbour < 4)
                 {
                     cell.live = true;
-                    continue;
-                }
-                else if (cell.liveNeighbour > 1 && cell.liveNeighbour < 4)
-                {
-                    cell.liveNeighbour = 0;
-                    continue;
+                    surviving = true;
                 }
                 else if (cell.live == true && cell.liveNeighbour > 3)
                 {
                     cell.live = false;
-                    continue;
                 }
-                else
+                else if (cell.live == false && cell.liveNeighbour == 3)
                 {
-                    Console.WriteLine("This should never happen");
+                    cell.live = true;
+                    surviving = true;
                 }
+            }
+            return surviving;
+        }
 
-                Viewport.createLife(cell.col, cell.row, cell.live);
+        private static void RenderAll()
+        {
+            foreach (Cell cell in cells)
+            {
+                Viewport.DrawLife(cell.col, cell.row, cell.live);
             }
         }
 
-        private static void findLiveCells()
+        private static void FindLiveCells()
         {
-            for (int r = 0; r < Viewport.curHeight; r++)
+            for (int r = 0; r < cellHeight; r++)
             {
-                for (int c = 0; c < Viewport.curWidth; c++)
+                for (int c = 0; c < cellWidth - 1; c++)
                 {
 
                     if (cells[r, c].live == true)
                     {
-                        neighbourIncreaseCount(r, c);
+                        NeighbourIncreaseCount(r, c);
                     }
                 }
             }
         }
 
-        private static void neighbourIncreaseCount(int row, int column)
+        private static void NeighbourIncreaseCount(int row, int column)
         {
-            for (int r = row - 1; r < row + 1; r++)
+            for (int r = row - 1; r < row + 2; r++)
             {
-                for(int c = column - 1; c < column + 1; c++)
+                if (!(r < 0 || r >= Viewport.buffHeight))
                 {
-                    if (r < 0 || c < 0 || r >= Viewport.curHeight || c >= Viewport.curWidth)
+                    for(int c = column - 1; c < column + 2; c++)
                     {
-                        continue;
+                        if (r == row && c == column)
+                        {
+                            continue;
+                        }
+                        if (!(c < 0 || c >= Viewport.buffWidth))
+                        {
+                            cells[r, c].liveNeighbour++;
+                        }
+
                     }
-                    cells[r, c].liveNeighbour++;
                 }
             }
         }
 
-        internal static void Start(int[] initPos)
+        internal static void Initialize(List<int> initPos)
         {
             foreach (int num in initPos)
             {
-                int x = num % Viewport.curWidth;
-                int y = num / Viewport.curWidth;
+                int x = num % (Viewport.buffWidth -1);
+                int y = num / (Viewport.buffWidth - 1);
 
                 cells[y, x].live = true;
-                Viewport.createLife(x, y, true);
+                Viewport.DrawLife(x, y, true);
             }
         }
     }

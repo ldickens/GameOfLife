@@ -2,68 +2,64 @@
 {
     static internal class Viewport
     {
-        public static int curHeight = Console.WindowHeight;
-        public static int curWidth = Console.WindowWidth;
-        public static char[,] buffer = new char[curHeight, curWidth]; 
+        public static int buffHeight = Console.BufferHeight;
+        public static int buffWidth = Console.BufferWidth;
+        public static char[,] buffer = new char[buffHeight, buffWidth]; 
 
         static Viewport()
         {
             Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.CursorVisible = false;
+            Console.CursorVisible = true;
         }
 
-        public static void fillBuffer(char character)
+        public static void FillBuffer(char character)
         {
-            for (int r = 0; r < curHeight; r++)
+            for (int r = 0; r < buffHeight; r++)
             {
-                for (int c = 0; c < curWidth; c++)
+                for (int c = 0; c < buffWidth; c++)
                 {
-                    buffer[r, c] = character;
-                    Console.Write(character);
+                    if (c == 120) //Can't backspace the last element in the buffer. So filling with a space
+                    {
+                        buffer[r, c] = ' ';
+                    }
+                    else
+                    {
+                        buffer[r, c] = character;
+                        Console.Write(character);
+                    }
                 }
             }
         }
 
-        private static void insertChar(char character, int x, int y)
+        private static void InsertChar(char character, int col, int row)
         {
-            if (x > curWidth || y > curHeight)
+            if (col > buffWidth || row > buffHeight)
             {
                 return;
             }
-            Console.SetCursorPosition(x, y);
-            buffer[y, x] = character;
+
+            Console.SetCursorPosition(col + 1, row);
+            buffer[row, col] = character;
             Console.Write("\b");
             Console.Write(character);
-            writeFromCursor();
         }
 
-        private static void writeFromCursor()
-        {
-            (int c, int r) coord = Console.GetCursorPosition();
-
-            for (int y = coord.r+1 ;y < curHeight; y++)
-            {
-                for (int x = coord.c+1 ;x < curWidth; x++)
-                { 
-                    Console.Write(buffer[y, x]);
-                }
-                Console.Write("\n");
-            }
-        }
-
-        public static void initialize()
+        public static void Initialize()
         {
             Console.Clear();
-            fillBuffer(' ');
+            FillBuffer(' ');
         }
 
-        public static void createLife(int x, int y, bool live)
+        public static void DrawLife(int col, int row, bool live)
         {
             if (live)
             {
-                insertChar((char)127, x, y);
+                InsertChar('x', col, row);
             }
-            insertChar(' ', x, y);
+            else
+            {
+                InsertChar(' ', col, row);
+            }
         }
     }
 }
