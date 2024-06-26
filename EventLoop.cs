@@ -5,10 +5,11 @@
         public static void Start()
         {
             bool debugging = true;
-            List<int> coord = new List<int>();
 
             while (true)
             {
+
+                List<int> coord = new List<int>();
 
                 if (debugging)
                 {
