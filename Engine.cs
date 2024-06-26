@@ -35,10 +35,12 @@ namespace GameOfLife
 
             while (surviving == true && generations < 31)
             {
+                Viewport.RenderBuffer();
                 FindLiveCells();
                 surviving = CalcNewGeneration();
+
                 UpdateBuffer();
-                Viewport.RenderBuffer();
+
                 Thread.Sleep(1000);
                 generations++;
             }
@@ -137,12 +139,12 @@ namespace GameOfLife
         {
             foreach (int num in initPos)
             {
-                int x = num % (Viewport.buffWidth -1);
-                int y = num / (Viewport.buffWidth - 1);
+                int c = num % (Viewport.buffWidth -1);
+                int r = num / (Viewport.buffWidth - 1);
 
-                cells[y, x].live = true;
-                Viewport.DrawLife(x, y, true);
+                cells[r, c].live = true;
             }
+            UpdateBuffer();
         }
     }
 }
