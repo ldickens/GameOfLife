@@ -9,7 +9,7 @@
         static Viewport()
         {
             Console.BackgroundColor = ConsoleColor.DarkBlue;
-            Console.CursorVisible = true;
+            Console.CursorVisible = false;
         }
 
         public static void FillBuffer(char character)

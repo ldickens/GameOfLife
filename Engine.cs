@@ -31,26 +31,36 @@ namespace GameOfLife
         public static void run()
         {
             bool surviving = true;
+            int generations = 0;
 
-            while (surviving == true)
+            while (surviving == true && generations < 31)
             {
                 FindLiveCells();
                 surviving = CalcNewGeneration();
                 UpdateBuffer();
                 Viewport.RenderBuffer();
                 Thread.Sleep(1000);
+                generations++;
             }
-            Console.WriteLine("\nCivilisation Failed");
+            if (surviving != true)
+            {
+                Console.WriteLine("\nCivilisation Failed");
+            }
+            else
+            {
+                Console.WriteLine("\nGenerational Success!!");
+            }
+            Thread.Sleep(3000);
         }
 
-        //private static void Reset()
-        //{
-        //    foreach (Cell cell in cells)
-        //    {
-        //        cell.live = false;
-        //        cell.liveNeighbour = 0;
-        //    }
-        //}
+        public static void Reset()
+        {
+            foreach (Cell cell in cells)
+            {
+                cell.live = false;
+                cell.liveNeighbour = 0;
+            }
+        }
 
         private static bool CalcNewGeneration()
         {
@@ -64,7 +74,7 @@ namespace GameOfLife
                     cell.liveNeighbour = 0;
                     surviving = true;
                 }
-                else if (cell.live == true && cell.liveNeighbour > 2 && cell.liveNeighbour < 4)
+                else if (cell.live == true && cell.liveNeighbour > 1 && cell.liveNeighbour < 4)
                 {
                     cell.live = true;
                     cell.liveNeighbour = 0;

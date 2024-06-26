@@ -27,6 +27,8 @@
                 Viewport.Initialize();
                 Engine.Initialize(coord);
                 Engine.run();
+                Engine.Reset();
+
             }
         }
     }
