@@ -18,6 +18,7 @@ namespace GameOfLife
 
         static Engine()
         {
+            // Intialize the cell array structure
             for (int r = 0; r < cellHeight; r++)
             {
                 for (int c = 0; c < cellWidth; c++)
@@ -35,56 +36,50 @@ namespace GameOfLife
             {
                 FindLiveCells();
                 surviving = CalcNewGeneration();
-                RenderAll();
+                UpdateBuffer();
+                Viewport.RenderBuffer();
                 Thread.Sleep(1000);
             }
             Console.WriteLine("\nCivilisation Failed");
-            Reset();
         }
 
-        private static void Reset()
-        {
-            foreach (Cell cell in cells)
-            {
-                cell.live = false;
-                cell.liveNeighbour = 0;
-            }
-        }
+        //private static void Reset()
+        //{
+        //    foreach (Cell cell in cells)
+        //    {
+        //        cell.live = false;
+        //        cell.liveNeighbour = 0;
+        //    }
+        //}
 
         private static bool CalcNewGeneration()
         {
             bool surviving = false;
-
-            foreach (var cell in cells)
+            
+            foreach (Cell cell in cells)  
             {
-                if (cell.live == false && cell.liveNeighbour != 3)
+                if (cell.live == false && cell.liveNeighbour == 3)
                 {
+                    cell.live = true;
                     cell.liveNeighbour = 0;
+                    surviving = true;
                 }
-                else if (cell.live && cell.liveNeighbour < 2)
+                else if (cell.live == true && cell.liveNeighbour > 2 && cell.liveNeighbour < 4)
+                {
+                    cell.live = true;
+                    cell.liveNeighbour = 0;
+                    surviving = true;
+                }
+                else
                 {
                     cell.live = false;
                     cell.liveNeighbour = 0;
-                }
-                else if (cell.live == true && cell.liveNeighbour > 1 && cell.liveNeighbour < 4)
-                {
-                    cell.live = true;
-                    surviving = true;
-                }
-                else if (cell.live == true && cell.liveNeighbour > 3)
-                {
-                    cell.live = false;
-                }
-                else if (cell.live == false && cell.liveNeighbour == 3)
-                {
-                    cell.live = true;
-                    surviving = true;
                 }
             }
             return surviving;
         }
 
-        private static void RenderAll()
+        private static void UpdateBuffer()
         {
             foreach (Cell cell in cells)
             {
@@ -96,10 +91,9 @@ namespace GameOfLife
         {
             for (int r = 0; r < cellHeight; r++)
             {
-                for (int c = 0; c < cellWidth - 1; c++)
+                for (int c = 0; c < cellWidth; c++)
                 {
-
-                    if (cells[r, c].live == true)
+                    if (cells[r,c].live == true)
                     {
                         NeighbourIncreaseCount(r, c);
                     }
@@ -111,7 +105,7 @@ namespace GameOfLife
         {
             for (int r = row - 1; r < row + 2; r++)
             {
-                if (!(r < 0 || r >= Viewport.buffHeight))
+                if (!(r < 0 || r >= cellHeight))
                 {
                     for(int c = column - 1; c < column + 2; c++)
                     {
@@ -119,7 +113,7 @@ namespace GameOfLife
                         {
                             continue;
                         }
-                        if (!(c < 0 || c >= Viewport.buffWidth))
+                        if (!(c < 0 || c >= cellWidth))
                         {
                             cells[r, c].liveNeighbour++;
                         }

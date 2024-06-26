@@ -4,7 +4,7 @@
     {
         public static int buffHeight = Console.BufferHeight;
         public static int buffWidth = Console.BufferWidth;
-        public static char[,] buffer = new char[buffHeight, buffWidth]; 
+        private static char[,] buffer = new char[buffHeight, buffWidth]; 
 
         static Viewport()
         {
@@ -31,17 +31,14 @@
             }
         }
 
-        private static void InsertChar(char character, int col, int row)
+        public static void RenderBuffer()
         {
-            if (col > buffWidth || row > buffHeight)
-            {
-                return;
-            }
+            Console.Clear();
 
-            Console.SetCursorPosition(col + 1, row);
-            buffer[row, col] = character;
-            Console.Write("\b");
-            Console.Write(character);
+            foreach (char c in buffer)
+            {
+                Console.Write(c);
+            }
         }
 
         public static void Initialize()
@@ -54,11 +51,11 @@
         {
             if (live)
             {
-                InsertChar('x', col, row);
+                buffer[row, col] = 'x';
             }
             else
             {
-                InsertChar(' ', col, row);
+                buffer[row, col] = ' ';
             }
         }
     }
