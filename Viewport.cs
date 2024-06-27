@@ -2,8 +2,8 @@
 {
     static internal class Viewport
     {
-        public static int buffHeight = Console.BufferHeight;
-        public static int buffWidth = Console.BufferWidth;
+        public static int buffHeight = Console.WindowHeight;  // This was changed from BufferHeight because Win10 would read a buffer of 9001 but Win11 would read Window Height 30
+        public static int buffWidth = Console.WindowWidth;  // This was changed to match above due to above explanation.
         private static char[,] buffer = new char[buffHeight, buffWidth]; 
 
         static Viewport()
