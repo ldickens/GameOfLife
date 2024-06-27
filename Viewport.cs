@@ -31,14 +31,21 @@
             }
         }
 
-        public static void RenderBuffer()
-        {
-            Console.Clear();
+        //public static void RenderBuffer()
+        //{
+        //    Console.Clear();
 
-            foreach (char c in buffer)
-            {
-                Console.Write(c);
-            }
+        //    foreach (char c in buffer)
+        //    {
+        //        Console.Write(c);
+        //    }
+        //}
+
+        public static void RenderChar(int col, int row, char character)
+        {
+            Console.SetCursorPosition(col+1, row);
+            Console.Write("\b");
+            Console.Write(character);
         }
 
         public static void Initialize()
@@ -49,13 +56,15 @@
 
         public static void DrawLife(int col, int row, bool live)
         {
-            if (live)
+            if (live && buffer[row, col] != 'x')
             {
                 buffer[row, col] = 'x';
+                RenderChar(col, row, 'x');
             }
-            else
+            else if (!live &&  buffer[row, col] != ' ')
             {
                 buffer[row, col] = ' ';
+                RenderChar(col, row, ' ');
             }
         }
     }

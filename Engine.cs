@@ -28,13 +28,10 @@ namespace GameOfLife
 
             while (surviving == true && generations < 31)
             {
-                Viewport.RenderBuffer();
                 FindLiveCells();
                 surviving = CalcNewGeneration();
-
-                UpdateBuffer();
-
                 Thread.Sleep(1000);
+                UpdateBuffer();
                 generations++;
             }
             if (surviving != true)
