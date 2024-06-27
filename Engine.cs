@@ -5,13 +5,6 @@ namespace GameOfLife
 {
     static class Engine
     {
-        /* Two Algos to complete this task:
-         * 1st:
-         * Check each elements neighbours keeping a count,  finally iterate through whole buffer and update viewport.
-         * 
-         * 2nd:
-         * Check each live cell then add a count to each neighbour, finally iterate through whole buffer and update viewport.
-        */
         public static int cellWidth = Viewport.buffWidth - 1;
         public static int cellHeight = Viewport.buffHeight;
         private static Cell[,] cells = new Cell[cellHeight, cellWidth];

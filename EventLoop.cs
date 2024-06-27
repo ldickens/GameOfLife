@@ -15,7 +15,7 @@
                 if (debugging)
                 {
 
-                    for (int i = 0; i < 501; i++)
+                    for (int i = 0; i < 301; i++)
                     {
                         coord.Add(rand.Next(0, Engine.cellWidth * Engine.cellHeight)); 
                     }
